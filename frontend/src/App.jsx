@@ -57,7 +57,6 @@ function App() {
 }
 
 export default App;
-=======
 import { Routes, Route } from "react-router-dom"
 import Catalog from "./pages/Catalog"
 import AddBook from "./pages/AddBook"
@@ -104,4 +103,4 @@ function App() {
 }
 
 export default App
->>>>>>> cd4434f4efb6a48be7c5eb8713229f3d55739bca
+

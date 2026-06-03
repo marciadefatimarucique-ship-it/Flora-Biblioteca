@@ -142,7 +142,6 @@ function Register() {
 }
 
 export default Register;
-=======
 import { useState } from "react"
 import axios from "axios"
 import { Link, useNavigate } from "react-router-dom"
@@ -260,4 +259,4 @@ function Register() {
 }
 
 export default Register
->>>>>>> cd4434f4efb6a48be7c5eb8713229f3d55739bca
+

@@ -11,7 +11,7 @@ const BookSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Book", BookSchema);
-=======
+
 const mongoose = require("mongoose")
 
 const BookSchema = new mongoose.Schema({
@@ -42,4 +42,4 @@ const BookSchema = new mongoose.Schema({
 })
 
 module.exports = mongoose.model("Book", BookSchema)
->>>>>>> cd4434f4efb6a48be7c5eb8713229f3d55739bca
+

@@ -41,7 +41,6 @@ function Home() {
 }
 
 export default Home;
-=======
 import { Link } from "react-router-dom"
 
 function Home() {
@@ -220,4 +219,4 @@ function Home() {
 }
 
 export default Home
->>>>>>> cd4434f4efb6a48be7c5eb8713229f3d55739bca
+

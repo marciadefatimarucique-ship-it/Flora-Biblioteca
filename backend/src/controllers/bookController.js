@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 const Book = require("../models/Book");
 
 const getBookById = async (req, res) => {
@@ -89,7 +89,6 @@ const deleteBook = async (req, res) => {
 };
 
 module.exports = { getBooks, getBookById, createBook, updateBook, deleteBook };
-=======
 const Book = require("../models/Book")
 
 // ADD BOOK
@@ -132,4 +131,4 @@ exports.getBooks = async (req, res) => {
   }
 
 }
->>>>>>> cd4434f4efb6a48be7c5eb8713229f3d55739bca
+

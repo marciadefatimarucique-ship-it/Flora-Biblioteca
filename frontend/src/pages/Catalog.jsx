@@ -170,7 +170,6 @@ function Catalog() {
 }
 
 export default Catalog;
-=======
 import { useEffect, useState } from "react"
 
 function Catalog() {
@@ -256,4 +255,4 @@ function Catalog() {
 }
 
 export default Catalog
->>>>>>> cd4434f4efb6a48be7c5eb8713229f3d55739bca
+
