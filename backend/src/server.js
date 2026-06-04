@@ -18,7 +18,8 @@ app.use(cors({
   origin: [
     "http://localhost:5173", 
     "http://localhost:3000", 
-    "https://flora-biblioteca-c6hw-85tdemvbe.vercel.app"
+    "https://flora-biblioteca-c6hw-85tdemvbe.vercel.app",
+    "https://flora-biblioteca-c6hw.vercel.app"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true,
