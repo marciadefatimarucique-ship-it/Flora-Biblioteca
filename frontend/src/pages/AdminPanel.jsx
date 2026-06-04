@@ -16,8 +16,8 @@ const TrashIcon = () => (
 );
 
 function AdminPanel() {
-  const API_URL = "http://localhost:5000/api/books";
-  const API_USERS = "http://localhost:5000/api/usuarios/total";
+  const API_URL = "https://flora-biblioteca-1.onrender.com/api/books";
+  const API_USERS = "https://flora-biblioteca-1.onrender.com/api/usuarios/total";
   const navigate = useNavigate();
 
   const [livros, setLivros] = useState([]);
@@ -134,7 +134,7 @@ function AdminPanel() {
   const getCapaUrl = (capa) => {
     if (!capa) return null;
     if (capa.startsWith("http")) return capa;
-    return `http://localhost:5000/uploads/${capa}`;
+    return `https://flora-biblioteca-1.onrender.com/uploads/${capa}`;
   };
 
   return (

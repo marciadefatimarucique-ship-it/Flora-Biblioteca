@@ -7,8 +7,8 @@ function Reader() {
   const [livro, setLivro] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const API_URL = `http://localhost:5000/api/books/${id}`;
-  const UPLOADS_URL = "http://localhost:5000/uploads";
+  const API_URL = `https://flora-biblioteca-1.onrender.com/api/books/${id}`;
+  const UPLOADS_URL = "https://flora-biblioteca-1.onrender.com/uploads";
 
   useEffect(() => {
     const buscarLivro = async () => {

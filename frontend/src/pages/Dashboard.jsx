@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
-  const API_URL = "http://localhost:5000/api/books";
-  const UPLOADS_URL = "http://localhost:5000/uploads";
+  const API_URL = "https://flora-biblioteca-1.onrender.com/api/books";
+  const UPLOADS_URL = "https://flora-biblioteca-1.onrender.com/uploads";
   const navigate = useNavigate();
 
   const [livros, setLivros] = useState([]);
@@ -37,7 +37,7 @@ function Dashboard() {
     const token = localStorage.getItem("token");
     if (token && token !== "admin-token-local") {
       try {
-        await fetch("http://localhost:5000/api/usuarios/marcar-leitura", {
+        await fetch("https://flora-biblioteca-1.onrender.com/api/usuarios/marcar-leitura", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

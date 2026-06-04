@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 function Profile() {
   const navigate = useNavigate();
-  const API_BASE = "http://localhost:5000/api";
+  const API_BASE = "https://flora-biblioteca-1.onrender.com/api";
 
   const [nomeExibido, setNomeExibido] = useState("Leitor");
   const [emailExibido, setEmailExibido] = useState("");

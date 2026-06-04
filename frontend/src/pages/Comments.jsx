@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 function Comments({ livroId }) {
-  const API_URL = `http://localhost:5000/api/comentarios/${livroId}`;
+  const API_URL = `https://flora-biblioteca-1.onrender.com/api/comentarios/${livroId}`;
 
   const [comentarios, setComentarios] = useState([]);
   const [loading, setLoading] = useState(true);

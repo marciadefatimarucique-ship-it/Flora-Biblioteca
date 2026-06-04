@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 function Catalog() {
   const navigate = useNavigate();
-  const API_URL = "http://localhost:5000/api/books";
-  const UPLOADS_URL = "http://localhost:5000/uploads"; // ✅ URL base dos uploads
+  const API_URL = "https://flora-biblioteca-1.onrender.com/api/books";
+  const UPLOADS_URL = "https://flora-biblioteca-1.onrender.com/uploads"; // ✅ URL base dos uploads
 
   const [livros, setLivros] = useState([]);
   const [pesquisa, setPesquisa] = useState("");

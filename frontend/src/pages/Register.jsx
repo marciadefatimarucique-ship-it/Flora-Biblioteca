@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 function Register() {
   const navigate = useNavigate();
-  const API_URL = "http://localhost:5000/api/auth/register";
+  const API_URL = "https://flora-biblioteca-1.onrender.com/api/auth/register";
 
   const [formData, setFormData] = useState({
     nome: "",
