@@ -7,27 +7,31 @@ function Login() {
 
   const [formData, setFormData] = useState({ usuario: "", senha: "" });
   const [loading, setLoading] = useState(false);
+  const [erro, setErro] = useState("");
+  const [sucesso, setSucesso] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setErro("");
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setErro("");
+    setSucesso("");
 
-    // ADMIN: Apenas senha, sem utilizador
+    // LOGIN ADMIN especial (sem conta na BD)
     if (formData.usuario.trim() === "" && formData.senha === "ADMIN123") {
-      alert("Acesso Administrativo Concedido!");
       localStorage.setItem("userRole", "admin");
       localStorage.setItem("nomeUsuario", "Administrador");
       localStorage.setItem("emailUsuario", "admin@flora.com");
+      localStorage.setItem("token", "admin-token-local");
       setLoading(false);
       navigate("/admin");
       return;
     }
 
-    // LOGIN NORMAL
     try {
       const response = await fetch(API_URL, {
         method: "POST",
@@ -38,20 +42,27 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Login efetuado com sucesso!");
-
-        // Guardar dados no localStorage
+        // Guardar token JWT e dados do utilizador
+        localStorage.setItem("token", data.token);
         localStorage.setItem("userRole", data.usuario.role || "leitor");
         localStorage.setItem("nomeUsuario", data.usuario.nome);
         localStorage.setItem("emailUsuario", data.usuario.email);
+        localStorage.setItem("userId", data.usuario.id);
 
-        navigate("/dashboard");
+        setSucesso("Login efetuado com sucesso!");
+        setTimeout(() => {
+          if (data.usuario.role === "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/dashboard");
+          }
+        }, 800);
       } else {
-        alert(data.message || "Utilizador ou senha incorretos.");
+        setErro(data.message || "Utilizador ou senha incorretos.");
       }
     } catch (error) {
       console.error("Erro ao conectar:", error);
-      alert("Erro de conexão com o servidor. Verifique se o backend está ligado.");
+      setErro("Erro de conexão com o servidor. Verifique se o backend está ligado.");
     } finally {
       setLoading(false);
     }
@@ -66,6 +77,18 @@ function Login() {
         <p className="text-gray-400 text-xs mb-8 font-light">
           Insira as suas credenciais para entrar.
         </p>
+
+        {/* Mensagens de feedback */}
+        {erro && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl font-medium">
+            ⚠️ {erro}
+          </div>
+        )}
+        {sucesso && (
+          <div className="mb-4 p-3 bg-green-50 border border-green-200 text-green-600 text-sm rounded-xl font-medium">
+            ✅ {sucesso}
+          </div>
+        )}
 
         <form onSubmit={handleLogin} className="space-y-5 text-left">
           <div className="flex flex-col">
@@ -101,7 +124,7 @@ function Login() {
               disabled={loading}
               className="w-full py-3 bg-[#db2777] hover:bg-[#be185d] disabled:bg-gray-300 text-white font-bold rounded-xl shadow-md transition duration-200 text-sm tracking-wide"
             >
-              {loading ? "Autenticando..." : "Entrar"}
+              {loading ? "A autenticar..." : "Entrar"}
             </button>
           </div>
         </form>

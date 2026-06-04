@@ -1,34 +1,41 @@
-
 const Book = require("../models/Book");
-
-const getBookById = async (req, res) => {
-  try {
-    const livro = await Book.findById(req.params.id);
-    if (!livro) {
-      return res.status(404).json({ message: "Livro não encontrado" });
-    }
-    res.status(200).json(livro);
-  } catch (error) {
-    console.error("Erro ao buscar livro por ID:", error);
-    res.status(500).json({ message: error.message });
-  }
-};
+const path = require("path");
+const fs = require("fs");
 
 const getBooks = async (req, res) => {
   try {
-    const books = await Book.find();
+    const books = await Book.find().sort({ createdAt: -1 });
     const livrosNormalizados = books.map((book) => ({
       _id: book._id,
-      titulo: book.titulo || book.title || "Sem título",
-      autor: book.autor || book.author || "Desconhecido",
-      categoria: book.categoria || book.category || "Ficção",
-      resumo: book.resumo || book.description || "",
-      capa: book.capa || book.image || "",
+      titulo: book.titulo || "",
+      autor: book.autor || "",
+      categoria: book.categoria || "",
+      resumo: book.resumo || "",
+      capa: book.capa || "",
       pdf: book.pdf || "",
     }));
     res.status(200).json(livrosNormalizados);
   } catch (error) {
     console.error("Erro ao listar livros:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getBookById = async (req, res) => {
+  try {
+    const livro = await Book.findById(req.params.id);
+    if (!livro) return res.status(404).json({ message: "Livro não encontrado." });
+    res.status(200).json({
+      _id: livro._id,
+      titulo: livro.titulo,
+      autor: livro.autor,
+      categoria: livro.categoria,
+      resumo: livro.resumo,
+      capa: livro.capa,
+      pdf: livro.pdf,
+    });
+  } catch (error) {
+    console.error("Erro ao buscar livro por ID:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -58,16 +65,11 @@ const updateBook = async (req, res) => {
       categoria: req.body.categoria,
       resumo: req.body.resumo,
     };
-    if (req.files?.capa) {
-      dados.capa = req.files.capa[0].filename;
-    }
-    if (req.files?.pdf) {
-      dados.pdf = req.files.pdf[0].filename;
-    }
+    if (req.files?.capa) dados.capa = req.files.capa[0].filename;
+    if (req.files?.pdf) dados.pdf = req.files.pdf[0].filename;
+
     const livro = await Book.findByIdAndUpdate(req.params.id, dados, { new: true });
-    if (!livro) {
-      return res.status(404).json({ message: "Livro não encontrado" });
-    }
+    if (!livro) return res.status(404).json({ message: "Livro não encontrado." });
     res.json(livro);
   } catch (error) {
     console.error("Erro ao atualizar livro:", error);
@@ -78,10 +80,20 @@ const updateBook = async (req, res) => {
 const deleteBook = async (req, res) => {
   try {
     const livro = await Book.findByIdAndDelete(req.params.id);
-    if (!livro) {
-      return res.status(404).json({ message: "Livro não encontrado" });
+    if (!livro) return res.status(404).json({ message: "Livro não encontrado." });
+
+    // Apagar ficheiros físicos se existirem
+    const uploadsDir = path.join(__dirname, "..", "uploads");
+    if (livro.capa) {
+      const capaPath = path.join(uploadsDir, livro.capa);
+      if (fs.existsSync(capaPath)) fs.unlinkSync(capaPath);
     }
-    res.json({ message: "Livro removido com sucesso" });
+    if (livro.pdf) {
+      const pdfPath = path.join(uploadsDir, livro.pdf);
+      if (fs.existsSync(pdfPath)) fs.unlinkSync(pdfPath);
+    }
+
+    res.json({ message: "Livro removido com sucesso." });
   } catch (error) {
     console.error("Erro ao remover livro:", error);
     res.status(500).json({ message: error.message });
@@ -89,46 +101,3 @@ const deleteBook = async (req, res) => {
 };
 
 module.exports = { getBooks, getBookById, createBook, updateBook, deleteBook };
-const Book = require("../models/Book")
-
-// ADD BOOK
-exports.addBook = async (req, res) => {
-
-  try {
-
-    const book = await Book.create(req.body)
-
-    res.status(201).json({
-      message: "Livro adicionado",
-      book
-    })
-
-  } catch (error) {
-
-    res.status(500).json({
-      message: error.message
-    })
-
-  }
-
-}
-
-// GET BOOKS
-exports.getBooks = async (req, res) => {
-
-  try {
-
-    const books = await Book.find()
-
-    res.status(200).json(books)
-
-  } catch (error) {
-
-    res.status(500).json({
-      message: error.message
-    })
-
-  }
-
-}
-

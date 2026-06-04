@@ -5,20 +5,19 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Catalog from "./pages/Catalog";
 import BookDetails from "./pages/BookDetails";
-import Comments from "./pages/Comments";
 import Profile from "./pages/Profile";
 import Reader from "./pages/Reader";
 import AdminPanel from "./pages/AdminPanel";
-import AddBook from "./pages/AddBook";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-// Componente de Proteção para rotas Administrativas
+// Proteção de rotas Administrativas
 const RotaAdminProtegida = ({ children }) => {
   const cargo = localStorage.getItem("userRole");
+  const token = localStorage.getItem("token");
+  if (!token) return <Navigate to="/login" replace />;
   if (cargo !== "admin") {
-    alert("Acesso restrito! Apenas o Administrador pode aceder a esta área.");
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
   return children;
 };
@@ -26,47 +25,24 @@ const RotaAdminProtegida = ({ children }) => {
 function App() {
   return (
     <>
-      {/* Exibe a barra de navegação no topo de todas as páginas */}
       <Navbar />
-
       <Routes>
-        {/* Telas Iniciais e Autenticação */}
+        {/* Páginas públicas */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
-        {/* Telas Principais da Aplicação */}
         <Route path="/catalog" element={<Catalog />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/reader" element={<Reader />} />
-        <Route path="/reader/:id" element={<Reader />} />
-        <Route path="/add-book" element={<AddBook />} />
-
-        {/* Dashboard Protegido para usuários comuns/autenticados */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Telas de Detalhes Dinâmicas */}
         <Route path="/book/:id" element={<BookDetails />} />
-        <Route path="/comments/:id" element={<Comments />} />
-        
-        {/* Painel Administrativo Protegido */}
-        <Route 
-          path="/admin" 
-          element={
-            <RotaAdminProtegida>
-              <AdminPanel />
-            </RotaAdminProtegida>
-          } 
-        />
+        <Route path="/reader/:id" element={<Reader />} />
 
-        {/* Redirecionamento padrão caso a rota não exista */}
+        {/* Páginas protegidas (utilizador autenticado) */}
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+
+        {/* Painel Admin (apenas admins) */}
+        <Route path="/admin" element={<RotaAdminProtegida><AdminPanel /></RotaAdminProtegida>} />
+
+        {/* Redirecionamento para rotas inexistentes */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
